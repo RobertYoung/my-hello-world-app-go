@@ -11,10 +11,12 @@ import (
 var hostname = ""
 
 const (
+	// PORT represents the listening port for the webserver
 	PORT = 8080
 )
 
-type Response struct {
+// EchoResponse reprents the response to return
+type EchoResponse struct {
 	Hostname string `json:"hostname"`
 	Path     string `json:"path"`
 }
@@ -46,7 +48,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func echoHandler(w http.ResponseWriter, r *http.Request) {
-	data := Response{
+	data := EchoResponse{
 		Path:     "/" + r.URL.Path[1:],
 		Hostname: hostname,
 	}
