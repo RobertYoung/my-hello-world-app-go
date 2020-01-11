@@ -12,6 +12,7 @@
 
 ## Quick Run 
 
+### Locally
 ```sh
 # install dependencies
 go install 
@@ -23,6 +24,13 @@ go run main.go
 curl localhost:8080
 curl localhost:8080/health
 curl localhost:8080/echo
+```
+
+### Minikube
+
+```sh
+# builds and deploys the application to minikube
+./scripts/deploy.sh
 ```
 
 ## Go
@@ -60,11 +68,8 @@ docker run -it --rm -p 8080:8080 my-hello-world-app-go
 ## Kubernetes
 
 ```sh
-# make sure the minikube cluster is selected
-kubectl config get-contexts
-
-# set the namespace to hello-world
-kubectl config set-context --current --namespace hello-world
+# set the minikube cluster and use the hello-world namespace
+kubectl config set-context minikube --namespace hello-world
 
 # apply changes to the k8s cluster
 kubectl apply -f k8s.yaml
@@ -72,9 +77,17 @@ kubectl apply -f k8s.yaml
 # verify changes
 kubectl get all
 
-# expose the deployment outside the cluster
-kubectl expose deployment my-hello-world-app-go --type=LoadBalancer --name=my-hello-world-app-go
-
-# view the service on your host
+# view the service on your host (should open up in your default browser)
 minikube service --namespace='hello-world' my-hello-world-app-go
 ```
+
+## Things to Try
+
+When you've got the application running, navigate to the `/echo` route and view the hostname, which is the name of the pod.
+
+```sh
+# replace the hostname and delete the pod
+kubectl delete --namespace hello-world pod {HOSTNAME}
+```
+
+Reload the application, and it will assign you a healthy pod.
