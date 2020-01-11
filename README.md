@@ -4,7 +4,7 @@
 
 > Write a simple hello world application in any one of these languages: Python, Ruby, Go. Build the application within a Docker container and then load balance the application within minikube. You are not required to automate the installation of minikube on the host machine.
 
-## Prerequisite
+## Prerequisites
 
 - [Go](https://golang.org/doc/install)
 - [Docker](https://docs.docker.com/v17.09/engine/installation/) 
