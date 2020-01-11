@@ -31,3 +31,5 @@ curl localhost:8080/echo
 1. `go build`
 1. `go test`
 1. `go run`
+1. `docker build -t my-hello-world-app-go .`
+1. `docker run -it --rm -p 8080:8080 my-hello-world-app-go`
