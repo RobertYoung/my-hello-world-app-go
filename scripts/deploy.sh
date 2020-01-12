@@ -1,21 +1,20 @@
 #/bin/bash
 
-# exit on error
-set -e
-
 # variables
 PROJECT_NAME="my-hello-world-app-go"
+COLOUR_BLUE='\033[0;34m'
+COLOUR_NO='\033[0m'
 
 # check if minikube is running
 minikube_status=$(minikube status)
-running_status=$(grep -o "Running" <<<"$minikube_status" | wc -l)
-configured_status=$(grep -o "Configured" <<<"$minikube_status" | wc -l)
 
-if [ $running_status != "3" ] || [ $configured_status != "1" ]; then
+if [ "$?" -ne 0 ]; then
     echo "Minikube is not running"
-    minikube status
+    echo "Try: ${COLOUR_BLUE}minikube start --kubernetes-version 1.16.4${COLOUR_NO}"
     exit 1
 fi
+
+set -e
 
 # use docker in minikubes vm
 eval $(minikube docker-env)

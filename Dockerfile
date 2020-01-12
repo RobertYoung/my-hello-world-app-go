@@ -2,16 +2,16 @@
 FROM golang:1.13
 
 # Use /app as the working directory
-WORKDIR /app
+WORKDIR /app/hello-world
 
 # Copy files to the working directory
-ADD . /app
+ADD . .
 
 # Build the application
-RUN go build -o main .
+RUN make compile
 
 # Expose the port that the application is running on
 EXPOSE 8080
 
 # Start the application
-CMD ["./main"]
+CMD ["./bin/hello-world"]

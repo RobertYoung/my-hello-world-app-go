@@ -24,12 +24,13 @@ func init() {
 
 func main() {
 	port := os.Getenv("PORT")
-	hostname := os.Getenv("HOSTNAME")
+
+	fmt.Printf("Listening on port " + port + "\n")
 
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/echo", echoHandler)
 	http.HandleFunc("/health", healthHandler)
-	http.ListenAndServe(hostname+":"+port, nil)
+	http.ListenAndServe(":"+port, nil)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {

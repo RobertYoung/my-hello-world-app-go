@@ -39,13 +39,17 @@ exec:
 
 ## clean: Clean build files. Runs `go clean` internally.
 clean:
-	@(MAKEFILE) go-clean
+	@-$(MAKE) go-clean
 
-test:
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go test
+## test: Run the unit tests
+test: go-get-test go-test
+
+## deploy: Deploys the application to Minikube
+deploy:
+	scripts/deploy.sh
 
 start-server: stop-server
-	@echo "  >  $(PROJECTNAME) is available at $(HOST):$(PORT)"
+	@echo "  >  $(PROJECTNAME) is available on port $(PORT)"
 	@-$(GOBIN)/$(PROJECTNAME) 2>&1 & echo $$! > $(PID)
 	@cat $(PID) | sed "/^/s/^/  \>  PID: /"
 
@@ -70,8 +74,14 @@ go-get:
 	@echo "  >  Checking if there is any missing dependencies..."
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go get $(get)
 
+go-get-test:
+	@-$(MAKE) go-get get=-t
+
 go-install:
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go install $(GOFILES)
+
+go-test:
+	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go test
 
 go-clean:
 	@echo "  >  Cleaning build cache"
