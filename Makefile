@@ -1,6 +1,7 @@
 include .env
 
 PROJECTNAME=$(shell basename "$(PWD)")
+K8S_NAMESPACE="hello-world"
 
 # Go related variables.
 GOBASE=$(shell pwd)
@@ -44,9 +45,17 @@ clean:
 ## test: Run the unit tests
 test: go-get-test go-test
 
-## deploy: Deploys the application to Minikube
-deploy:
-	scripts/deploy.sh
+## deploy: Builds and deploys the application to Minikube
+deploy: minikube-deploy
+
+## minikube-validate: Checks whether minikube is running
+minikube-validate:
+	@minikube status 2&> /dev/null || (echo "Minikube is not running"; exit 1);
+	@echo "Minikube is running"
+
+## minikube-start: Start minikube using kubernetes version 1.16.4
+minikube-start:
+	@minikube start --kubernetes-version 1.16.4
 
 start-server: stop-server
 	@echo "  >  $(PROJECTNAME) is available on port $(PORT)"
@@ -87,11 +96,34 @@ go-clean:
 	@echo "  >  Cleaning build cache"
 	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go clean
 
+minikube-deploy: minikube-validate
+	# use docker in minikubes vm
+	@eval $$(minikube docker-env); \
+	make docker-build k8s-set-minikube k8s-deploy minikube-service
+	echo "It may take a few seconds to load"
+
+minikube-service:
+	# view the service on your host (should open up in your default browser)
+	@minikube service --namespace=$(K8S_NAMESPACE) $(PROJECTNAME)
+
+docker-build:
+	# build docker image
+	@docker build -t $(PROJECTNAME) .
+
+## k8s-set-minikube: Sets the kubernetes context to minikube and the hello-world namespace
+k8s-set-minikube:
+	# set the minikube cluster and use the hello-world namespace
+	@kubectl config set-context minikube --namespace $(K8S_NAMESPACE)
+
+k8s-deploy:
+	# apply changes to the k8s cluster
+	@kubectl apply -f k8s.yaml
+
 .PHONY: help
 all: help
 help: Makefile
 	@echo
-	@echo " Choose a command run in "$(PROJECTNAME)":"
+	@echo " Choose a command to run in "$(PROJECTNAME)":"
 	@echo
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
 	@echo

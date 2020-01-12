@@ -10,75 +10,40 @@
 - [Docker](https://docs.docker.com/v17.09/engine/installation/) 
 - [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
-## Quick Run 
+## Endpoints
 
-### Locally
+|  Route    | Description                               |
+|-----------|-------------------------------------------|
+| /health   | Health check for the application          |
+| /echo     | Returns basic information on the host     |
+
+
+## Commands
+
+Builds and deploys the application to Minikube:
+
 ```sh
-# install dependencies
-go install 
-
-# build and start server
-go run main.go
-
-# test the server is running
-curl localhost:8080
-curl localhost:8080/health
-curl localhost:8080/echo
+make deploy
 ```
 
-### Minikube
+Other commands:
 
-```sh
-# builds and deploys the application to minikube
-./scripts/deploy.sh
 ```
+> make help
 
-## Go
+    Choose a command to run in my-hello-world-app-go:
 
-```sh
-# install go dependencies
-go install
-
-# compile application
-go build
-
-# run unit tests
-go test
-
-# start application 
-go run main.go
-```
-
-## Minikube + Docker
-
-```sh
-# start kubernetes cluster using minikube
-minikube start --kubernetes-version 1.16.4
-
-# Sets the docker env so we can build the docker images inside the minikube VM. This is for development only so we don't need to use an external registry
-eval $(minikube docker-env)
-
-# build docker image
-docker build -t my-hello-world-app-go .
-
-# run the application using the docker image
-docker run -it --rm -p 8080:8080 my-hello-world-app-go
-```
-
-## Kubernetes
-
-```sh
-# set the minikube cluster and use the hello-world namespace
-kubectl config set-context minikube --namespace hello-world
-
-# apply changes to the k8s cluster
-kubectl apply -f k8s.yaml
-
-# verify changes
-kubectl get all
-
-# view the service on your host (should open up in your default browser)
-minikube service --namespace='hello-world' my-hello-world-app-go
+      install             Install missing dependencies. Runs `go get` internally. e.g; make install get=github.com/foo/bar
+      start               Start in development mode
+      stop                Stop development mode.
+      compile             Compile the binary.
+      exec                Run given command, wrapped with custom GOPATH. e.g; make exec run="go test ./..."
+      clean               Clean build files. Runs `go clean` internally.
+      test                Run the unit tests
+      deploy              Builds and deploys the application to Minikube
+      minikube-validate   Checks whether minikube is running
+      minikube-start      Start minikube using kubernetes version 1.16.4
+      k8s-set-minikube    Sets the kubernetes context to minikube and the hello-world namespace
 ```
 
 ## Things to Try
@@ -94,5 +59,6 @@ Reload the application, and it will assign you a healthy pod.
 
 ## TODO
 
-1. golint
-1. deploy to EKS
+1. Implement static analysis tools, such as [golint](https://github.com/golang/lint)
+1. Deploy to [EKS](https://aws.amazon.com/eks/)
+1. Implement a more advanced web framework, such as [Revel](http://revel.github.io/)
