@@ -5,12 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
-)
 
-const (
-	// PORT represents the listening port for the webserver
-	PORT = 8080
+	"github.com/joho/godotenv"
 )
 
 // EchoResponse reprents the response to return
@@ -19,14 +15,21 @@ type EchoResponse struct {
 	Path     string `json:"path"`
 }
 
+func init() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		panic(err)
+	}
+}
+
 func main() {
-	port := strconv.Itoa(PORT)
-	fmt.Printf("Listening on port " + port + "\n")
+	port := os.Getenv("PORT")
+	hostname := os.Getenv("HOSTNAME")
 
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/echo", echoHandler)
 	http.HandleFunc("/health", healthHandler)
-	http.ListenAndServe(":"+port, nil)
+	http.ListenAndServe(hostname+":"+port, nil)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {

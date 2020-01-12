@@ -91,3 +91,8 @@ kubectl delete --namespace hello-world pod {HOSTNAME}
 ```
 
 Reload the application, and it will assign you a healthy pod.
+
+## TODO
+
+1. golint
+1. deploy to EKS
