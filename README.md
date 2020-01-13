@@ -62,3 +62,4 @@ Reload the application, and it will assign you a healthy pod.
 1. Implement static analysis tools, such as [golint](https://github.com/golang/lint)
 1. Deploy to [EKS](https://aws.amazon.com/eks/)
 1. Implement a more advanced web framework, such as [Revel](http://revel.github.io/)
+1. Package the application using [helm](https://github.com/helm/helm)
