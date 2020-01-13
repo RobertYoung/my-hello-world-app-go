@@ -1,13 +1,14 @@
 include .env
 
-PROJECTNAME=$(shell basename "$(PWD)")
-K8S_NAMESPACE="hello-world"
+# Project variables
+PROJECTNAME:="my-hello-world-app-go"
+K8S_NAMESPACE:="hello-world"
 
 # Go related variables.
-GOBASE=$(shell pwd)
-GOPATH="$(GOBASE)/vendor:$(GOBASE)"
-GOBIN=$(GOBASE)/bin
-GOFILES=$(wildcard *.go)
+GOBASE:=$(shell pwd)
+GOPATH:="$(GOBASE)/vendor:$(GOBASE)"
+GOBIN:=$(GOBASE)/bin
+GOFILES:=$(wildcard *.go)
 
 # Redirect error output to a file, so we can show it in development mode.
 STDERR=/tmp/.$(PROJECTNAME)-stderr.txt
