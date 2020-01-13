@@ -33,10 +33,12 @@ func main() {
 	http.ListenAndServe(":"+port, nil)
 }
 
+// Default handler
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Server is running!")
 }
 
+// Return information for the running application
 func echoHandler(w http.ResponseWriter, r *http.Request) {
 	hostname, err := os.Hostname()
 
@@ -54,6 +56,7 @@ func echoHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
+// Health check for the application. Should return 200
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Passed")
 }
